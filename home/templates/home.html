@@ -1,0 +1,18 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block head %}
+  <title> Menu de shows </title>
+{% endblock %}
+
+{% block content %}
+<div class="img"></div>
+<div class="center">
+  <div class="title">Bem-vindo ao Show</div>
+  <div class="sub_title"> Site Exclusivo para funcionarios</div>
+  <div class="btns">
+    <a href="{% url 'sobre-nos' %}" ><button id="sobre-nos">Saiba mais</button> </a>
+    <a href="{% url 'shows' %}" style="all: unset;"> <button>Shows</button> </shows>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{%load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static "css/sobre-nos.css" %}">
+    <title>Sobre nós</title>
+</head>
+<body>
+  <section class="about">
+    <div class="main">
+        <img src="{% static 'imgs/SpotLight.jpeg' %}" alt="Foto da Logo">
+        <div class="about-text">
+            <h1>Sobre</h1>
+            <h5>Bem-vindo <span>Funcionários</span></h5>
+            <p>Como você já sabe, a equipe Spotlight é uma empresa voltada para o entretenimento, especialmente na área de teatro. 
+                Este site foi criado para ajudar funcionários como você a desenvolver seu trabalho. 
+                Através deste site, vocês poderão gerenciar o cadastro de shows e eventos dentro do teatro de forma eficiente.
+            </p>
+            <a href="{% url 'shows' %}" style="all: unset;"><button type="button">Vamos Começar</button>
+        </div>
+    </div>
+  </section>
+</body>
+</html>

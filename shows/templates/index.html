@@ -1,0 +1,278 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block head %}
+    <title>Menu de Shows</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">    
+{% endblock %}    
+
+{% block content %}
+<main class="table" id="customers_table" style=" margin-top: 6% !important;">
+    <section class="table__header">
+        <h1>Shows</h1>
+        <div class="input-group">
+            <input type="search" placeholder="Search Data...">
+        </div>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addShowModal">Adicionar Show</button>
+       
+    </section>
+    <section class="table__body">
+        <table>
+            <thead>
+                <tr>
+                    <th> Id </th>
+                    <th> Nome </th>
+                    <th> Assentos </th>
+                    <th> Data </th>
+                    <th> Tipo </th>
+                    <th> Preço </th>
+                    <th>  </th>
+                    <th>  </th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                  {% for show in shows %}
+                <tr>
+                    <td> {{show.id}} </td>
+                    <td> <img src="{{ show.imagem.url }}" alt=""> <label id="limitedTitle">{{show.nome}}</label></td>
+                    <td> {{show.assentos}} </td>
+                    <td> {{show.data}} </td>
+                    <td>
+                        <p class="status delivered">{{show.tipo}}</p>
+                    </td>
+                    <td> <strong> ${{ show.preco}} </strong></td>
+                    <td>  
+                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editShowModal{{ show.id }}">Editar</button>
+                    </td>
+                    <td>   
+                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteShowModal{{ show.id }}">Excluir</button>
+                    </td>
+
+                    <!-- <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editShowModal{{ show.id }}">Editar</button>
+                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteShowModal{{ show.id }}">Excluir</button> -->
+                   
+                </tr>
+                
+                   {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+
+
+<!-- Modais -->
+<!-- Modal Adicionar Show -->
+<div class="modal fade" id="addShowModal" tabindex="-1" role="dialog" aria-labelledby="addShowModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addShowModalLabel">Adicionar Show</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'add' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="imagem">Imagem:</label>
+                        <input type="file" class="form-control" id="imagem" name="imagem" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <input type="text" class="form-control" id="nome" name="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao">Descrição</label>
+                        <textarea class="form-control" id="descricao" name="descricao" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="preco">Preço</label>
+                        <input type="number" class="form-control" id="preco" name="preco" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">Tipo</label>
+                        <select class="form-control" id="tipo" name="tipo" required>
+                            <option value="Comedia">Comédia</option>
+                            <option value="Acao">Ação</option>
+                            <option value="Drama">Drama</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assentos">Assentos</label>
+                        <input type="number" class="form-control" id="assentos" name="assentos" min="1" max="50"required>
+                    </div>
+                    <div class="form-group">
+                        <label for="elenco">Elenco</label>
+                        <input type="text" class="form-control" id="elenco" name="elenco" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="secoes">Seções</label>
+                        <input type="number" class="form-control" id="secoes" name="secoes" min="1" max="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data</label>
+                        <input type="date" class="form-control" id="data" name="data" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="horarios">Horários</label>
+                        <input type="time" class="form-control" id="horarios" name="horarios" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Show -->
+{% for show in shows %}
+<div class="modal fade" id="editShowModal{{ show.id }}" tabindex="-1" role="dialog" aria-labelledby="editShowModalLabel{{ show.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editShowModalLabel{{ show.id }}">Editar Show</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'update' show.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="imagem">Imagem:</label>
+                        <input type="file" id="imagem" name="imagem">
+                        {% if show.imagem %}
+                            <div>
+                                <img src="{{ show.imagem.url }}" alt="{{ show.nome }}" width="200">
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <input value="{{ show.nome }}" type="text" class="form-control" id="nome" name="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao">Descrição</label>
+                        <textarea class="form-control" id="descricao" name="descricao" required>{{ show.descricao }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="preco">Preço</label>
+                        <input value="{{ show.preco|floatformat:2  }}" type="number" class="form-control" id="preco" name="preco" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">Tipo</label>
+                        <select class="form-control" id="tipo" name="tipo" required>
+                            <option value="Comedia" {% if show.tipo == "Comedia" %}selected{% endif %}>Comédia</option>
+                            <option value="Acao" {% if show.tipo == "Acao" %}selected{% endif %}>Ação</option>
+                            <option value="Drama" {% if show.tipo == "Drama" %}selected{% endif %}>Drama</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="assentos">Assentos</label>
+                        <input value="{{ show.assentos }}" type="number" class="form-control" id="assentos" name="assentos" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="elenco">Elenco</label>
+                        <input value="{{ show.elenco }}" type="text" class="form-control" id="elenco" name="elenco" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="secoes">Seções</label>
+                        <input value="{{ show.secoes }}" type="number" class="form-control" id="secoes" name="secoes" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data</label>
+                        <input value="{{ show.data|date:"Y-m-d" }}" type="date" class="form-control" id="data" name="data" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="horarios">Horários</label>
+                        <input value="{{ show.horarios|time:'h:i:s' }}" type="time" class="form-control" id="horarios" name="horarios" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Modal Excluir Show -->
+{% for show in shows %}
+<div class="modal fade" id="deleteShowModal{{ show.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteShowModalLabel{{ show.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteShowModalLabel{{ show.id }}">Excluir Show</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'delete' show.id %}" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p>Você tem certeza que deseja excluir o show "{{ show.nome }}"?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var titleElement = document.getElementById('limitedTitle');
+      var originalTitle = titleElement.textContent;
+      var maxLength = 18; // número máximo de caracteres
+  
+      if (originalTitle.length > maxLength) {
+        var limitedTitle = originalTitle.substring(0, maxLength) + '...';
+        titleElement.textContent = limitedTitle;
+      }
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Seleciona o elemento de input de busca
+        var searchInput = document.querySelector('input[type="search"]');
+        
+        // Adiciona um listener para o evento de input
+        searchInput.addEventListener('input', function() {
+            var filterValue = searchInput.value.toUpperCase(); // Valor do input de busca em maiúsculas
+            
+            // Seleciona todas as linhas da tabela (exceto o cabeçalho)
+            var rows = document.querySelectorAll('#customers_table table tbody tr');
+            
+            // Itera sobre cada linha e verifica se contém o valor de busca
+            rows.forEach(function(row) {
+                var titleElement = row.querySelector('label[id^="limitedTitle"]');
+                if (titleElement) {
+                    var titleText = titleElement.textContent || titleElement.innerText;
+                    if (titleText.toUpperCase().indexOf(filterValue) > -1) {
+                        row.style.display = ''; // Mostra a linha se corresponder ao filtro
+                    } else {
+                        row.style.display = 'none'; // Oculta a linha se não corresponder ao filtro
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

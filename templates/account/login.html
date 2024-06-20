@@ -1,0 +1,56 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="wrapper">
+        <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            <h2>Login</h2>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        {% if message.tags == 'success' %}
+                            <li class="{{ message.tags }}" style="color: white;">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% if form.non_field_errors %}
+                <div class="error-messages">
+                    <ul>
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="input-field">
+                {{ form.login }}
+                <label for="{{ form.login.id_for_label }}">Insira seu email ou usuário</label>
+            </div>
+            <div class="input-field">
+                {{ form.password }}
+                <label for="{{ form.password.id_for_label }}">Insira sua senha</label>
+            </div>
+            <div class="forget">
+                <label for="remember">
+                    {{ form.remember }}
+                    <p>Lembre de mim</p>
+                </label>
+                <a href="{% url 'account_reset_password' %}">Esqueceu a senha?</a>
+            </div>
+            <button type="submit">Log In</button>
+            <div class="register">
+                <p>Não possui uma conta? <a href="{% url 'account_signup' %}">Registro</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

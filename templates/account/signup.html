@@ -1,0 +1,57 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="wrapper">
+        <form method="post" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            <h2>Registro</h2>
+            <div class="error-messages">
+                {% if form.non_field_errors %}
+                    <ul>
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% for field in form %}
+                    {% if field.errors %}
+                        <ul>
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="input-field">
+                {{ form.username }}
+                <label for="{{ form.username.id_for_label }}">Insira seu nome de usuário</label>
+            </div>
+            <div class="input-field">
+                {{ form.email }}
+                <label for="{{ form.email.id_for_label }}">Insira seu email</label>
+            </div>
+            <div class="input-field">
+                {{ form.password1 }}
+                <label for="{{ form.password1.id_for_label }}">Insira sua senha</label>
+            </div>
+            <div class="input-field">
+                {{ form.password2 }}
+                <label for="{{ form.password2.id_for_label }}">Confirme sua senha</label>
+            </div>
+            <button type="submit">Registrar</button>
+            <div class="login">
+                <p>Já possui uma conta? <a href="{% url 'account_login' %}">Login</a></p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
