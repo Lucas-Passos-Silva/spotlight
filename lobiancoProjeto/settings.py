@@ -32,9 +32,9 @@ MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 
 from google.oauth2 import service_account
 
-GOOGLE_APPLICATION_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+credentials_raw = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
-GS_CREDENTIALS = GS_CREDENTIALS = service_account.Credentials.from_service_account_info('GOOGLE_APPLICATION_CREDENTIALS')
+GS_CREDENTIALS = service_account.Credentials.from_service_account_info(credentials_raw)
 
 SITE_ID = 1
 
