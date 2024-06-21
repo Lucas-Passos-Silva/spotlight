@@ -128,9 +128,9 @@ USE_I18N = True
 USE_TZ = True
 
 # Arquivos estáticos
-STATIC_URL = '/static/' #staticfiles
+STATIC_URL = '/staticfiles/' #staticfiles
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] #staticfiles
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')] #staticfiles
 
 
 # Arquivos de mídia
