@@ -6,7 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Configurações de segurança
 SECRET_KEY = 'django-insecure-*kh*19_nrtc2f9p1%(2gisd=2_&&z@o7^4*b+76^4!oc^c6a15'
 DEBUG = True  # Defina como False em produção
-ALLOWED_HOSTS = [".vercel.app"]
+#ALLOWED_HOSTS = [".vercel.app"]
+ALLOWED_HOSTS = ["*"]
 
 # Configuração dos aplicativos
 INSTALLED_APPS = [
@@ -23,6 +24,14 @@ INSTALLED_APPS = [
     'home',
     'shows',
 ]
+
+# Configurações do Google Cloud Storage
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'imagens-spotlight'
+MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
+
+from google.oauth2 import service_account
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file('s3-key.json')
 
 SITE_ID = 1
 
@@ -107,9 +116,9 @@ USE_I18N = True
 USE_TZ = True
 
 # Arquivos estáticos
-STATIC_URL = '/staticfiles/'
+STATIC_URL = '/static/' #staticfiles
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] #staticfiles
 
 
 # Arquivos de mídia

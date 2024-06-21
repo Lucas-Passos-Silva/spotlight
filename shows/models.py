@@ -3,7 +3,7 @@ from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_delete
 from django.core.validators import MinValueValidator, MaxValueValidator
-
+from django.core.files.storage import default_storage
 class Show(models.Model):
     TIPO_CHOICES = (
         ('Comedia', 'Comédia'),
@@ -37,6 +37,5 @@ class Show(models.Model):
     
 @receiver(post_delete, sender=Show)
 def delete_show_image(sender, instance, **kwargs):
-    if instance.imagem:
-        if os.path.isfile(instance.imagem.path):
-            os.remove(instance.imagem.path)
+    if instance.imagem and default_storage.exists(instance.imagem.name):
+        default_storage.delete(instance.imagem.name)
