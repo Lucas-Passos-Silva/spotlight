@@ -34,11 +34,17 @@ MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 from google.oauth2 import service_account
 
 # Carrega as credenciais do ambiente
+# Carrega as credenciais do ambiente
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
-    GOOGLE_APPLICATION_CREDENTIALS
-)
 
+if GOOGLE_APPLICATION_CREDENTIALS:
+    with open(GOOGLE_APPLICATION_CREDENTIALS) as f:
+        credentials_info = json.load(f)
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(credentials_info)
+else:
+    GS_CREDENTIALS = None  # Lida com o caso em que as credenciais não estão configuradas
+
+    
 SITE_ID = 1
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
