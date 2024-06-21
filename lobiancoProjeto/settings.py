@@ -32,9 +32,18 @@ MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 
 from google.oauth2 import service_account
 
+# Carrega as credenciais do ambiente
 credentials_raw = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
-GS_CREDENTIALS = service_account.Credentials.from_service_account_info(credentials_raw)
+# Verifica se as credenciais são válidas
+if credentials_raw:
+    try:
+        GS_CREDENTIALS = service_account.Credentials.from_service_account_info(credentials_raw)
+    except ValueError as e:
+        print(f"Erro ao carregar credenciais: {e}")
+        GS_CREDENTIALS = None
+else:
+    GS_CREDENTIALS = None
 
 SITE_ID = 1
 
