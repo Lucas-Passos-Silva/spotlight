@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import json
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -34,6 +35,14 @@ from google.oauth2 import service_account
 
 # Carrega as credenciais do ambiente
 credentials_raw = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+
+print(credentials_raw)
+
+# Converta credentials_raw para um dicionário Python
+credentials_dict = json.loads(credentials_raw)
+
+# Crie as credenciais usando o dicionário convertido
+GS_CREDENTIALS = service_account.Credentials.from_service_account_info(credentials_dict)
 
 # Verifica se as credenciais são válidas
 if credentials_raw:
