@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Configurações de segurança
 SECRET_KEY = 'django-insecure-*kh*19_nrtc2f9p1%(2gisd=2_&&z@o7^4*b+76^4!oc^c6a15'
-DEBUG = False  # Defina como False em produção
+DEBUG = True  # Defina como False em produção
 #ALLOWED_HOSTS = [".vercel.app"]
 ALLOWED_HOSTS = ["*"]
 
@@ -34,12 +34,12 @@ MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 from google.oauth2 import service_account
 
 # Carrega as credenciais do ambiente
-# Carrega as credenciais do ambiente
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
+
 if GOOGLE_APPLICATION_CREDENTIALS:
-    with open(GOOGLE_APPLICATION_CREDENTIALS) as f:
-        credentials_info = json.load(f)
+    # Carrega as credenciais do arquivo JSON
+    credentials_info = json.loads(GOOGLE_APPLICATION_CREDENTIALS)
     GS_CREDENTIALS = service_account.Credentials.from_service_account_info(credentials_info)
 else:
     GS_CREDENTIALS = None  # Lida com o caso em que as credenciais não estão configuradas
@@ -128,9 +128,9 @@ USE_I18N = True
 USE_TZ = True
 
 # Arquivos estáticos
-STATIC_URL = '/staticfiles/' #staticfiles
+STATIC_URL = '/static/' #staticfiles
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')] #staticfiles
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] #staticfiles
 
 
 # Arquivos de mídia
